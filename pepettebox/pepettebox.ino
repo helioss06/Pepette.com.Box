@@ -48,7 +48,7 @@
 
 // Analog input
 #define NB_SAMPLE_ANALOG		16
-#define VOLT_DIVIDER_INPUT		18.0 		// Voltage divider ratio for mesuring input voltage. 
+#define VOLT_DIVIDER_INPUT		5.964 		// Voltage divider ratio for mesuring input voltage. 
 #define MAX_DC_IN				36			// Max input voltage
 #define MIN_DC_IN				9			// Minimum input voltage
 // Lipo
@@ -284,15 +284,13 @@ void GetAnalogRead(void){
 		Serial.println("-- Analog input read --");
 		MyFlag.taskGetAnalog = false;
 		// read 16 times and average
-		unsigned int i = 0;
-		//on fait plusieurs mesures
-		for( i = 0; i < NB_SAMPLE_ANALOG; i++){
+		for( unsigned int i = 0; i < NB_SAMPLE_ANALOG; i++){
 			//read analog input
 			long x  = analogRead(A0);	//gives value between 0 to 1023
 			samples.add(x);
 			delay(10);
 		}
-		//ocompute median value
+		// compute median value
 		MyExternalSupply.raw = samples.getMedian();
 		sprintf(buff," Analog raw input = %d\r\n", MyExternalSupply.raw );
 		Serial.print(buff);
@@ -301,7 +299,7 @@ void GetAnalogRead(void){
 		sprintf(buff," Analog voltage= %2.1fV\r\n", MyExternalSupply.analog_voltage );
 		Serial.print(buff);
 		// compute true input voltage
-		MyExternalSupply.input_voltage = MyExternalSupply.analog_voltage * VOLT_DIVIDER_INPUT + 0.425; // +0.425V for forward voltage of protection diode
+		MyExternalSupply.input_voltage = MyExternalSupply.analog_voltage * VOLT_DIVIDER_INPUT + 0.41; // +0.41V for forward voltage of protection diode
 		sprintf(buff," Input voltage= %2.1fV\r\n", MyExternalSupply.input_voltage );
 		Serial.println(buff);
 	}	
